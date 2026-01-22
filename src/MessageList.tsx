@@ -166,9 +166,44 @@ const MessageList: React.FC<MessageListProps> = ({
           </div>
         </div>
       )}
-
-     
-    
+ <div className="flex-1 overflow-y-auto p-6 space-y-4 message-container">
+        {messages.map((msg, index) => (
+          <div
+            key={msg.id || index}
+            className={`message ${msg.type === 'message' ? (msg.username === username ? 'own' : 'other') : msg.type}`}
+          >
+            <div className="message-bubble bg-purple-900/20 backdrop-blur-lg p-4 rounded-lg max-w-xl mx-auto shadow-lg">
+              {msg.type === 'message' && (
+                <>
+                  <div className="message-header">
+                    <span className="username text-purple-300 text-sm mb-1">{msg.username}</span>
+                    <span className="timestamp text-xs text-purple-300/60 mt-2">
+                      {new Date(msg.timestamp).toLocaleTimeString()}
+                    </span>
+                  </div>
+                  <div className="content text-gray-100">{msg.content}</div>
+                </>
+              )}
+              {msg.type === 'join' && (
+                <div className="content text-green-300 text-center">
+                  <span className="username font-semibold">{msg.username}</span> joined the chat!
+                </div>
+              )}
+              {msg.type === 'leave' && (
+                <div className="content text-red-300 text-center">
+                  <span className="username font-semibold">{msg.username}</span> left the chat!
+                </div>
+              )}
+              {msg.type === 'announce' && (
+                <div className="content announce text-yellow-300 text-center">
+                  📢 <strong>Announcement:</strong> {msg.content}
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+        <div ref={messagesEndRef} />
+      </div>
 
       {isConnected && (
         <div className="p-4 bg-purple-900/10 border-t border-purple-500/20">
