@@ -22,10 +22,15 @@ const MessageInput: React.FC<MessageInputProps> = ({
           placeholder="Type your message..."
           className="flex-1 bg-purple-900/30 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-200 placeholder-purple-300/40"
         />
+        <>
+
+        Do you want to send this message to the chat?
+        </>
         <button
           onClick={sendMessage}
           className="bg-purple-600 hover:bg-purple-700 text-white py-2 px-6 rounded-lg flex items-center gap-2 transition-all duration-200 font-medium shadow-lg shadow-purple-500/20 hover:shadow-purple-500/40 hover:scale-[1.02] active:scale-[0.98]"
         >
+            
           <Send size={18} />
           Send
         </button>
