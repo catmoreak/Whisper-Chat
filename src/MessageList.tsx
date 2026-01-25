@@ -17,7 +17,7 @@ const MessageList: React.FC<MessageListProps> = ({ messages }) => {
       {messages.map((msg) => (
         <div
           key={msg.id}
-          className="bg-purple-900/20 backdrop-blur-lg p-4 rounded-lg max-w-xl mx-auto shadow-lg message-bubble"
+          className="bg-blue-900/20 backdrop-blur-lg p-4 rounded-lg max-w-xl mx-auto shadow-lg message-bubble"
         >
           <div className="text-purple-300 text-sm mb-1">{msg.username}</div>
           <div className="text-gray-100">{msg.text}</div>

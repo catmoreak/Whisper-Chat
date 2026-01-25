@@ -156,7 +156,7 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-purple-950 flex flex-col">
+    <div className="min-h-screen bg-blue-950 flex flex-col">
       <ChatHeader
         roomCode={roomCode}
         onlineUsers={onlineUsers}
@@ -174,10 +174,10 @@ function App() {
         position="top-right"
         toastOptions={{
           style: {
-            background: '#2D1B69',
+            background: '#1e3a8a',
             color: '#F3F4F6',
             borderRadius: '8px',
-            border: '1px solid rgba(124, 58, 237, 0.2)',
+            border: '1px solid rgba(59, 130, 246, 0.2)',
           },
         }}
       />
