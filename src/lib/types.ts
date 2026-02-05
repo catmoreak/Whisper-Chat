@@ -3,6 +3,8 @@ export interface Message {
   timestamp: number;
   id: string;
   username: string;
+  mediaUrl?: string;
+  mediaType?: 'image';
 }
 
 export interface RoomData {
