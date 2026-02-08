@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Send, Paperclip } from 'lucide-react';
+import { Send, Image } from 'lucide-react';
 interface MessageInputProps {
   message: string;
   setMessage: (value: string) => void;
@@ -45,15 +45,15 @@ const MessageInput: React.FC<MessageInputProps> = ({
           type="file"
           ref={fileInputRef}
           onChange={handleFileSelect}
-          accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.txt"
+          accept="image/png,image/jpeg,image/heic"
           className="hidden"
         />
         <button
           onClick={triggerFileSelect}
           className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg flex items-center gap-2 transition-all duration-200 font-medium shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 hover:scale-[1.02] active:scale-[0.98]"
-          title="Attach media file"
+          title="Attach image"
         >
-          <Paperclip size={18} />
+          <Image size={18} />
         </button>
         <button
           onClick={sendMessage}
