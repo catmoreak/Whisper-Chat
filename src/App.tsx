@@ -12,6 +12,7 @@ import ChatHeader from './components/ChatHeader';
 import MessageList from './MessageList';
 import MessageInput from './MessageInput';
 import InfoButton from './infoButton';
+import { utapi } from './lib/uploadthing';
 
 function App() {
   const [roomCode, setRoomCode] = useState<string>('');
@@ -22,6 +23,7 @@ function App() {
   const username = useUsername();
   const [onlineUsers, setOnlineUsers] = useState<number>(0);
   const [loadingText, setLoadingText] = useState<string>('');
+  const [uploading, setUploading] = useState<boolean>(false);
 
   useEffect(() => {
     if (!roomCode) return;
@@ -116,6 +118,34 @@ function App() {
     setMessage('');
   };
 
+  const handleFileSelect = async (file: File) => {
+    setUploading(true);
+    try {
+      const response = await utapi.uploadFiles([file]);
+      if (response.length > 0) {
+        const fileUrl = response[0].data?.url;
+        if (fileUrl) {
+          const messagesRef = ref(db, `rooms/${roomCode}/messages`);
+          const newMessageRef = push(messagesRef);
+          await set(newMessageRef, {
+            text: `Shared an image: ${file.name}`,
+            mediaUrl: fileUrl,
+            mediaType: 'image',
+            timestamp: Date.now(),
+            id: newMessageRef.key,
+            username
+          });
+          toast.success('Image uploaded successfully!');
+        }
+      }
+    } catch (error) {
+      console.error('Upload failed:', error);
+      toast.error('Failed to upload image');
+    } finally {
+      setUploading(false);
+    }
+  };
+
   useEffect(() => {
     if (!roomCode) return;
 
@@ -168,6 +198,8 @@ function App() {
         message={message}
         setMessage={setMessage}
         sendMessage={sendMessage}
+        onFileSelect={handleFileSelect}
+        uploading={uploading}
       />
       <InfoButton showInfo={showInfo} />
       <Toaster 

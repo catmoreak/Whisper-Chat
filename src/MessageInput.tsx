@@ -5,6 +5,7 @@ interface MessageInputProps {
   setMessage: (value: string) => void;
   sendMessage: () => void;
   onFileSelect?: (file: File) => void;
+  uploading?: boolean;
 }
 
 const MessageInput: React.FC<MessageInputProps> = ({
@@ -12,6 +13,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
   setMessage,
   sendMessage,
   onFileSelect,
+  uploading = false,
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -50,10 +52,16 @@ const MessageInput: React.FC<MessageInputProps> = ({
         />
         <button
           onClick={triggerFileSelect}
-          className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg flex items-center gap-2 transition-all duration-200 font-medium shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 hover:scale-[1.02] active:scale-[0.98]"
+          disabled={uploading}
+          className={`py-2 px-4 rounded-lg flex items-center gap-2 transition-all duration-200 font-medium shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 hover:scale-[1.02] active:scale-[0.98] ${
+            uploading
+              ? 'bg-gray-600 cursor-not-allowed'
+              : 'bg-blue-600 hover:bg-blue-700'
+          } text-white`}
           title="Attach image"
         >
           <Image size={18} />
+          {uploading && 'Uploading...'}
         </button>
         <button
           onClick={sendMessage}
