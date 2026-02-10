@@ -1,6 +1,6 @@
-import { UTApi } from "uploadthing/client";
+import { generateReactHelpers } from "@uploadthing/react";
+import type { OurFileRouter } from "../../api/uploadthing/[...slug]";
 
+export const { useUploadThing, uploadFiles } =
+  generateReactHelpers<OurFileRouter>();
 
-export const utapi = new UTApi({
-  token: import.meta.env.VITE_UPLOADTHING_TOKEN,
-});

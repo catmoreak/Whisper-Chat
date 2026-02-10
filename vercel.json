@@ -1,0 +1,9 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "devCommand": "npm run dev",
+  "framework": "vite",
+  "env": {
+    "UPLOADTHING_TOKEN": "@uploadthing_token"
+  }
+}
