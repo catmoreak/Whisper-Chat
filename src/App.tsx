@@ -12,7 +12,7 @@ import ChatHeader from './components/ChatHeader';
 import MessageList from './MessageList';
 import MessageInput from './MessageInput';
 import InfoButton from './infoButton';
-import { utapi } from './lib/uploadthing';
+import { uploadFiles } from './lib/uploadthing';
 
 function App() {
   const [roomCode, setRoomCode] = useState<string>('');
@@ -121,9 +121,9 @@ function App() {
   const handleFileSelect = async (file: File) => {
     setUploading(true);
     try {
-      const response = await utapi.uploadFiles([file]);
+      const response = await uploadFiles("imageUploader", { files: [file] });
       if (response.length > 0) {
-        const fileUrl = response[0].data?.url;
+        const fileUrl = response[0].url;
         if (fileUrl) {
           const messagesRef = ref(db, `rooms/${roomCode}/messages`);
           const newMessageRef = push(messagesRef);
