@@ -3,7 +3,15 @@
   "outputDirectory": "dist",
   "devCommand": "npm run dev",
   "framework": "vite",
-  "env": {
-    "UPLOADTHING_TOKEN": "@uploadthing_token"
-  }
+  "functions": {
+    "api/**/*.ts": {
+      "runtime": "@vercel/node@3.2.26"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
+    }
+  ]
 }
