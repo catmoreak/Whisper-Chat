@@ -13,6 +13,7 @@ import MessageList from './MessageList';
 import MessageInput from './MessageInput';
 import InfoButton from './infoButton';
 import { uploadFiles } from './lib/uploadthing';
+import { encryptMessage, decryptMessage, generateKey } from './lib/crypto';
 
 function App() {
   const [roomCode, setRoomCode] = useState<string>('');
@@ -106,11 +107,13 @@ function App() {
 
   const sendMessage = async () => {
     if (!message.trim()) return;
+    const key = generateKey(roomCode);
+    const encryptedText = encryptMessage(message, key);
     
     const messagesRef = ref(db, `rooms/${roomCode}/messages`);
     const newMessageRef = push(messagesRef);
     await set(newMessageRef, {
-      text: message,
+      text: encryptedText,
       timestamp: Date.now(),
       id: newMessageRef.key,
       username
@@ -125,10 +128,13 @@ function App() {
       if (response.length > 0) {
         const fileUrl = response[0].url;
         if (fileUrl) {
+          const key = generateKey(roomCode);
+          const encryptedText = encryptMessage(`Shared an image: ${file.name}`, key);
+          
           const messagesRef = ref(db, `rooms/${roomCode}/messages`);
           const newMessageRef = push(messagesRef);
           await set(newMessageRef, {
-            text: `Shared an image: ${file.name}`,
+            text: encryptedText,
             mediaUrl: fileUrl,
             mediaType: 'image',
             timestamp: Date.now(),
@@ -153,8 +159,13 @@ function App() {
     const unsubscribe = onValue(messagesRef, (snapshot) => {
       const data = snapshot.val();
       if (data) {
+        const key = generateKey(roomCode);
         const messageList = Object.values(data) as Message[];
-        setMessages(messageList.sort((a, b) => a.timestamp - b.timestamp));
+        const decryptedMessages = messageList.map(msg => ({
+          ...msg,
+          text: decryptMessage(msg.text, key)
+        }));
+        setMessages(decryptedMessages.sort((a, b) => a.timestamp - b.timestamp));
       } else {
         setMessages([]);
       }
