@@ -12,7 +12,6 @@ import ChatHeader from './components/ChatHeader';
 import MessageList from './MessageList';
 import MessageInput from './MessageInput';
 import InfoButton from './infoButton';
-import { uploadFiles } from './lib/uploadthing';
 import { encryptMessage, decryptMessage, generateKey } from './lib/crypto';
 
 function App() {
@@ -124,25 +123,32 @@ function App() {
   const handleFileSelect = async (file: File) => {
     setUploading(true);
     try {
-      const response = await uploadFiles("imageUploader", { files: [file] });
-      if (response.length > 0) {
-        const fileUrl = response[0].url;
-        if (fileUrl) {
-          const key = generateKey(roomCode);
-          const encryptedText = encryptMessage(`Shared an image: ${file.name}`, key);
-          
-          const messagesRef = ref(db, `rooms/${roomCode}/messages`);
-          const newMessageRef = push(messagesRef);
-          await set(newMessageRef, {
-            text: encryptedText,
-            mediaUrl: fileUrl,
-            mediaType: 'image',
-            timestamp: Date.now(),
-            id: newMessageRef.key,
-            username
-          });
-          toast.success('Image uploaded successfully!');
-        }
+      const formData = new FormData();
+      formData.append('image', file);
+      formData.append('key', import.meta.env.VITE_IMGBB_API_KEY);
+
+      const response = await fetch('https://api.imgbb.com/1/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        const fileUrl = data.data.display_url;
+        const key = generateKey(roomCode);
+        const encryptedText = encryptMessage(`Shared an image: ${file.name}`, key);
+
+        const messagesRef = ref(db, `rooms/${roomCode}/messages`);
+        const newMessageRef = push(messagesRef);
+        await set(newMessageRef, {
+          text: encryptedText,
+          mediaUrl: fileUrl,
+          mediaType: 'image',
+          timestamp: Date.now(),
+          id: newMessageRef.key,
+          username
+        });
+        toast.success('Image uploaded successfully!');
       }
     } catch (error) {
       console.error('Upload failed:', error);
