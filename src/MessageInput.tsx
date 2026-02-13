@@ -47,7 +47,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
           type="file"
           ref={fileInputRef}
           onChange={handleFileSelect}
-          accept="image/png,image/jpeg,image/heic"
+          accept="image/*"
           className="hidden"
         />
         <button
