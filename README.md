@@ -9,8 +9,8 @@ A simple, anonymous chat application built with React,tailwind css  and Firebase
 - **Real-time Messaging**: Instant message delivery using Firebase
 - **Online User Count**: See how many people are in your room
 - **Modern UI**: Clean, dark blue theme with smooth animations using Tailwind CSS
--**Image upload**- Through the Img bb 
--**Encryption and Decrytion**- SHA256 encryption and decrytion for messages only (Images are not encryted)
+- **Image upload**- Through the Img bb 
+- **Encryption and Decrytion**- SHA256 encryption and decrytion for messages only (Images are not encryted)
 
 ## About
 
